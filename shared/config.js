@@ -6,7 +6,7 @@ export const AUTHOR_ID = "Robinson-27225";
 // Optional short link shown to players on the host lobby, e.g. "https://wikitree.s.gy/games". It must
 // open the landing page, which passes ?g=CODE on to the player page. Leave it empty to show the
 // full address of play.html instead.
-export const SHORT_URL = "";
+export const SHORT_URL = "https://wikitree.s.gy/games";
 
 // Base URL of the deployed Cloudflare Worker (see README). Override without editing this
 // file by opening a page with ?worker=...  e.g. ?worker=http://127.0.0.1:8787 for local dev.
