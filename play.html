@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WikiTree Games: Player</title>
+<link rel="icon" href="assets/logo-mark.png">
+<link rel="stylesheet" href="shared/style.css">
+<link rel="stylesheet" href="shared/games.css">
+<style>body{padding:14px 12px 130px}</style>
+</head>
+<body>
+<div class="conn hidden" id="conn">Reconnecting…</div>
+<main class="pwrap">
+  <!-- JOIN -->
+  <section class="ppanel" id="join">
+    <h1>Join the game</h1>
+    <p class="sub">WikiTree Games</p>
+    <div class="field" id="codeField">
+      <label for="code">Game code</label>
+      <input type="text" id="code" class="code" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD">
+    </div>
+    <div class="joinmode">
+      <div class="seg" role="group" aria-label="How to identify yourself">
+        <button type="button" id="modeId" aria-pressed="true">WikiTree ID</button>
+        <button type="button" id="modeName" aria-pressed="false">Just a username</button>
+      </div>
+    </div>
+    <div class="field">
+      <label for="who" id="whoLbl">Your WikiTree ID</label>
+      <input type="text" id="who" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Robinson-27225" maxlength="40">
+      <p class="hint" id="whoHint">Your ID is shown to the group if you score well.</p>
+    </div>
+    <div class="err" id="joinErr" role="alert" style="color:#b3261e"></div>
+    <button class="primary" id="joinBtn" type="button" style="width:100%">Join</button>
+  </section>
+
+  <!-- GAME -->
+  <section id="game" class="hidden">
+    <div class="ptop">
+      <div class="who" id="whoAmI"></div>
+      <div><span class="hint" id="gameName"></span> <button class="ghost" id="leave" type="button" style="padding:4px 12px;font-size:.85em">Leave</button></div>
+    </div>
+    <div class="wait hidden" id="waiting"></div>
+    <div id="presults" class="hidden"></div>
+    <div id="gameArea" class="hidden"></div>
+    <details class="board" id="boardBox"><summary>Scoreboard</summary><div id="scores"></div></details>
+  </section>
+</main>
+<footer class="site-foot" id="foot"></footer>
+<script type="module" src="ui/player.js"></script>
+</body>
+</html>

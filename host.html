@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WikiTree Games: Host</title>
+<link rel="icon" href="assets/logo-mark.png">
+<link rel="stylesheet" href="shared/style.css">
+<link rel="stylesheet" href="shared/games.css">
+</head>
+<body class="dark">
+<div class="conn hidden" id="conn">Reconnecting…</div>
+
+<!-- 1. PICK A GAME -->
+<main class="screen active" id="choose">
+  <h1>Host a game</h1>
+  <p class="sub">Pick a game. Players join from their own phones with a 4-letter code, and you can share this screen on a livecast.</p>
+  <div class="gamecards" id="gameCards"></div>
+  <div id="resumeBox" class="hidden" style="margin-top:22px;text-align:center">
+    <p class="hint">A game you hosted earlier is still open in this browser.</p>
+    <button class="ghost" id="resume" type="button"></button>
+  </div>
+</main>
+
+<!-- 2. SET UP -->
+<main class="screen" id="setup">
+  <h1 id="setupTitle">Set up</h1>
+  <p class="sub" id="setupBlurb"></p>
+  <div class="panel">
+    <div id="setupForm"></div>
+    <div class="err" id="setupErr" role="alert"></div>
+    <div class="btnrow">
+      <button class="primary" id="openLobby" type="button" style="flex:1 1 240px">Open lobby</button>
+      <button class="ghost" id="backBtn" type="button">Choose a different game</button>
+    </div>
+  </div>
+</main>
+
+<!-- 3. LOBBY -->
+<main class="screen" id="lobby">
+  <h1 id="lobbyTitle">Join the game</h1>
+  <div class="joinurl" id="joinUrl"></div>
+  <div class="bigcode" id="bigCode">----</div>
+  <div class="btnrow" style="justify-content:center">
+    <button class="ghost" id="copyLink" type="button">Copy join link</button>
+    <a class="ghost" id="playToo" target="_blank" rel="noopener" style="text-decoration:none;border:2px solid var(--hline);border-radius:12px;padding:8px 16px;font-weight:700;color:var(--pale)">Join as a player too</a>
+  </div>
+  <div class="plcount">Players waiting: <b id="lobbyCount">0</b></div>
+  <div class="chips" id="chips" aria-label="Players who have joined"></div>
+  <button class="logobtn" id="startBtn" type="button" aria-label="Start the game" disabled><img src="assets/logo-mark.png" alt=""><span>START</span></button>
+  <div class="hint" id="lobbyNote">Waiting for the first player…</div>
+</main>
+
+<!-- 4. PLAYING -->
+<main class="screen" id="stage">
+  <div class="topline">
+    <h2 id="stageTitle"></h2>
+    <div class="btnrow" style="align-items:center">
+      <div class="pill">Game code <b id="stageCode"></b></div>
+      <div class="pill">Players: <b id="stageCount">0</b></div>
+      <button class="ghost hidden" id="showResults" type="button">Results</button>
+      <button class="ghost" id="endBtn" type="button">End game</button>
+    </div>
+  </div>
+  <div class="stagegrid">
+    <div id="gameArea"></div>
+    <aside><h3>Scores</h3><div id="scores"></div></aside>
+  </div>
+</main>
+
+<!-- 5. RESULTS -->
+<div id="over" role="alertdialog" aria-live="assertive" aria-label="Game over">
+  <canvas id="confetti"></canvas>
+  <h1 style="position:relative">Game over!</h1>
+  <div id="resultsBox"></div>
+  <div class="btnrow">
+    <button class="primary" id="againBtn" type="button">Play again</button>
+    <button class="ghost" id="lookBtn" type="button">Look at the board</button>
+    <button class="ghost" id="newSession" type="button">New session</button>
+  </div>
+</div>
+
+<button class="mute" id="muteBtn" type="button" aria-pressed="true">Sound on</button>
+<footer class="site-foot" id="foot"></footer>
+<script type="module" src="ui/host.js"></script>
+</body>
+</html>
