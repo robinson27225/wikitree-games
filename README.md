@@ -5,6 +5,7 @@ Live genealogy games for WikiTree members, in the same look and spirit as [WikiT
 | Game | How it plays |
 |------|--------------|
 | **Clue Board** (Jeopardy-style) | The host's screen shows a board of categories. Pick a clue, players buzz in from their phones, then answer. Right answers score and take control of the board; wrong answers cost points and lock you out of that clue. Optional Daily Doubles with wagers. |
+| **Spin & Solve** (prize-wheel word puzzles) | Players take turns on a big prize wheel. Spin, then guess a consonant for the dollar amount on the wheel for every copy in the puzzle, buy a vowel for $250, or try to solve it. A wrong letter or a wrong solve passes the turn, and BANKRUPT or LOSE A TURN comes up too. Solving banks that round's cash (at least $500). Several puzzles per game. |
 | **Crossword** | One puzzle, built automatically from a list of answers and clues, that everyone fills in together in real time. You score 1 point for each correct square you typed and 3 for finishing a word. |
 | **Word Search** | Everyone hunts the same grid of hidden words. Drag across a word (or tap its first and last letters) and the first player to circle it claims it. Points equal the word's length. |
 
@@ -25,6 +26,7 @@ If the host's browser is refreshed, the host page offers **Resume game**. If a p
 Share the host browser window (not the whole desktop) on YouTube Live, Discord, Zoom or similar. The host screen is built for that: large text, a live scoreboard, and sound for the winner announcement.
 
 - **Clue Board:** answers are hidden by default. Press **P** or the *Peek at the answer* button to look, and be careful to peek only when you're not sharing that window or on a second screen. Space opens the buzzers and moves back to the board. Click a name in the scoreboard to hand them control of the board, or use **±** to correct a score. Daily Double clues stay off the shared screen until the player has wagered.
+- **Spin & Solve:** the wheel spins on the host screen while players spin from their phones, and the drum roll plays as it turns. The host can skip a turn that is taking too long, give up on a puzzle, or press Space for the next one. The answer is never sent to the host screen until the puzzle is solved or given up, so it's safe to share.
 - **Crossword and Word Search:** the host screen shows the live grid, with each player's finds and squares in their own colour.
 - Players can follow the stream and play on their phones at the same time. Buzz order is decided by the server, so tell viewers on a delayed stream to read the clue on their phone, which shows it straight away.
 
@@ -37,6 +39,8 @@ Kinship,100,Your mother's brother is your ___.,Uncle
 Kinship,200,"The child of your first cousin is your first cousin ___ removed.",Once|1
 ```
 Value is optional (it defaults to 100, 200, 300… down each category). Put several accepted answers in the Answer cell separated by `|`; the first is the one shown. Up to 8 categories and 8 clues each. With **Check typed answers automatically**, "what is an uncle", "UNCLE" and a one-letter typo in a long answer all count. In the default mode the host judges.
+
+**Spin & Solve:** `Category,Puzzle`, for example `Place,ELLIS ISLAND`. Puzzles are up to 60 characters with at least 3 letters; punctuation such as apostrophes is shown as a free clue. A solve counts if the letters match, ignoring spaces, punctuation and capitals. You choose how many puzzles to play (up to 10), the time allowed for each turn, and whether to shuffle.
 
 **Crossword:** `Answer,Clue`. Answers are 3 to 15 letters; spaces, hyphens and accents are ignored. Up to 60 words. The layout is generated for you, and every word that fits is placed.
 
@@ -69,14 +73,14 @@ node test/e2e.cjs       # host + players play every game in a browser (needs Pla
 Set `SHOTS=/some/dir` when running the end-to-end test to save screenshots of each screen.
 
 ## How it works
-- `shared/games/{clue,crossword,wordsearch}.js` hold each game as a pure state machine: content parsing and validation, generators, rules and scoring, and a `view()` that decides what the host and each player may see (players never receive Clue Board answers, or the crossword solution, until revealed).
+- `shared/games/{clue,wheel,crossword,wordsearch}.js` hold each game as a pure state machine: content parsing and validation, generators, rules and scoring, and a `view()` that decides what the host and each player may see (players never receive Clue Board answers, or the crossword solution, until revealed).
 - `shared/room.js` wraps one game in a session: who has joined, lobby, playing and results, kicking, and per-role snapshots. It runs unchanged in the Worker and in the unit tests.
 - `worker/src/index.js` is the Worker plus a `GameRoom` Durable Object per game code. It sends every connection a fresh snapshot (at most about 8 times a second), enforces timers, rate-limits each socket, and deletes a room after 24 hours of inactivity. Players refer to each other by a short public id, and the secret id in their browser is only used to get back in.
-- `ui/` holds the browser side: `host.js` and `player.js` are the pages, and `clue.js`, `crossword.js` and `wordsearch.js` each provide that game's setup form, shared-screen view and phone view.
+- `ui/` holds the browser side: `host.js` and `player.js` are the pages, and `clue.js`, `wheel.js`, `crossword.js` and `wordsearch.js` each provide that game's setup form, shared-screen view and phone view.
 - Scores, buzz order and answers are all decided on the server, so a modified browser can't award itself points.
 
 ## Limits
-Up to 200 players per session. The crossword and word search send the whole grid to everyone on each change, which is comfortable for a few dozen players typing at once. A very large crossword session would want delta updates.
+Up to 200 players per session. Spin & Solve is turn-based, so it is best with up to about 8 players; anyone else watches. The crossword and word search send the whole grid to everyone on each change, which is comfortable for a few dozen players typing at once. A very large crossword session would want delta updates.
 
 ## Ideas for later
 - A Final Clue round with secret wagers for Clue Board.

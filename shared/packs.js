@@ -145,3 +145,43 @@ Ancestor
 Descendant
 Surname
 `;
+
+export const WHEEL_PACKS = [{
+  id: "genealogy",
+  name: "Genealogy and WikiTree puzzles (28 puzzles)",
+  csv: `Category,Puzzle
+Genealogy Term,FAMILY TREE
+Genealogy Term,PEDIGREE CHART
+Genealogy Term,MAIDEN NAME
+Genealogy Term,CENSUS RECORD
+Genealogy Term,BIRTH CERTIFICATE
+Genealogy Term,GREAT GRANDPARENTS
+Genealogy Term,SECOND COUSIN ONCE REMOVED
+Genealogy Term,PARISH REGISTER
+Place,ELLIS ISLAND
+Place,NATIONAL ARCHIVES
+Place,SALT LAKE CITY
+Place,STATUE OF LIBERTY
+Famous Book,DOMESDAY BOOK
+WikiTree,WHERE GENEALOGISTS COLLABORATE
+WikiTree,CONNECTION FINDER
+WikiTree,HONOR CODE
+WikiTree,TRUSTED LIST
+WikiTree,FREE SPACE PAGE
+Old Occupation,BLACKSMITH
+Old Occupation,COAL MINER
+Old Occupation,SEAMSTRESS
+Old Occupation,TOWN CRIER
+Old Occupation,SHIP'S CAPTAIN
+Phrase,BLOOD IS THICKER THAN WATER
+Phrase,SKELETONS IN THE CLOSET
+Phrase,BLACK SHEEP OF THE FAMILY
+Phrase,THE APPLE DOESN'T FALL FAR FROM THE TREE
+Phrase,IT RUNS IN THE FAMILY
+`
+}];
+
+export const WHEEL_TEMPLATE = `Category,Puzzle
+Place,ELLIS ISLAND
+Phrase,SKELETONS IN THE CLOSET
+`;

@@ -220,6 +220,49 @@ const score = async (host, name) => host.evaluate(n => {
     await a.context().close();
   }
 
+  /* ---------- Spin & Solve ---------- */
+  {
+    const code = await openLobby(browser, host, "Spin & Solve", async h => {
+      await h.fill("#setupForm textarea", "Category,Puzzle\nPlace,ELLIS ISLAND");
+    });
+    const a = await joinPlayer(browser, code, "Smith-123");
+    const b = await joinPlayer(browser, code, "Lee-9");
+    await host.waitForFunction(() => document.getElementById("lobbyCount").textContent === "2");
+    await host.click("#startBtn", { force: true });
+    await host.waitForSelector(".wh-tile");
+    assert.equal(await host.locator(".wh-tile").count(), 11);
+    assert.equal(await a.locator(".wh-tile").count(), 11);
+    assert.equal((await a.textContent(".wh-board")).trim(), "", "no letters are shown before they are called");
+    const turnPage = async () => {                      // whichever phone is showing the SPIN button
+      await host.waitForFunction(() => /'s turn/.test(document.querySelector(".wh-turn").textContent));
+      const who = (await host.textContent(".wh-turn")).includes("Smith-123") ? a : b;
+      await who.waitForSelector(".buzz");
+      return who;
+    };
+    const first = await turnPage();
+    await shot(first, "wheel-player-turn");
+    await first.click(".buzz", { force: true });
+    await host.waitForFunction(() => document.querySelector(".wh-msg").textContent === "Spinning…");
+    await shot(host, "wheel-host-spinning");
+    await host.waitForFunction(() => document.querySelector(".wh-msg").textContent !== "Spinning…", null, { timeout: 15000 });
+    await shot(host, "wheel-host-landed");
+    if (await first.locator(".wh-pad").count()) {      // landed on cash: guess an L (three of them)
+      await shot(first, "wheel-player-guess");
+      await first.click('.wh-pad button:text-is("L")');
+      await host.waitForFunction(() => document.querySelectorAll(".wh-tile:not(.blank)").length === 3);
+      assert.match(await host.textContent(".wh-msg"), /3 × L/);
+    }
+    const next = await turnPage();
+    await next.click('button:has-text("Solve the puzzle")');
+    await next.fill(".cp-form input", "Ellis Island");
+    await next.click('button:has-text("Solve it")');
+    await host.waitForFunction(() => /solved it/.test(document.querySelector(".wh-turn").textContent));
+    await shot(host, "wheel-host-solved");
+    await host.waitForSelector("#over.show", { timeout: 20000 });     // the only puzzle: the next screen is the results
+    await shot(host, "wheel-over");
+    await a.context().close(); await b.context().close();
+  }
+
   await browser.close();
   console.log("e2e ok");
 })().catch(e => { console.error(e); process.exit(1); });
